@@ -4,7 +4,7 @@
              x:Class="AndroidCalc.MainPage">
 
     <StackLayout>
-        <Label Text="Calc" Margin="5" FontSize="Large" FontAttributes="Bold"/>
+        <Label Text="Калькулятор" Margin="30" FontSize="Large" FontAttributes="Bold"/>
         <StackLayout Orientation="Horizontal" Spacing="50" HorizontalOptions="CenterAndExpand">
             <Entry x:Name="num1" WidthRequest="100" Keyboard="Numeric"/>
             <Label Text="+"/>
