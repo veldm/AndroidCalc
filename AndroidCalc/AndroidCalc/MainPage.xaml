@@ -4,15 +4,21 @@
              x:Class="AndroidCalc.MainPage">
 
     <StackLayout>
-        <Label Text="Калькулятор" Margin="30" FontSize="Large" FontAttributes="Bold"/>
+        <Label Text="Калькулятор" Margin="30" FontSize="Large" FontAttributes="Bold" TextColor="Black"/>
+        <Entry x:Name="Input" HorizontalOptions="CenterAndExpand" Keyboard="Numeric"/>
         <StackLayout Orientation="Horizontal" Spacing="50" HorizontalOptions="CenterAndExpand">
-            <Entry x:Name="num1" WidthRequest="100" Keyboard="Numeric"/>
-            <Label Text="+"/>
-            <Entry x:Name="num2" WidthRequest="100" Keyboard="Numeric"/>
+            <Button Text="+"/>
+            <Button Text="-"/>
+            <Button Text="*"/>
         </StackLayout>
-        <Label Text="=" Margin="5" HorizontalTextAlignment="Center"/>
-        <Label x:Name="result" Margin="5" HorizontalTextAlignment="Center"/>
-        <Button Text="Calculate" Clicked="Button_Clicked"/>
+        <StackLayout Orientation="Horizontal" Spacing="50" HorizontalOptions="CenterAndExpand">
+            <Button Text="/"/>
+            <Button Text="^"/>
+            <Button Text="Sqrt"/>
+        </StackLayout>
+        <Label x:Name="result" Margin="15" HorizontalTextAlignment="Center" Text="Результат: "
+               FontSize="Large" FontAttributes="Bold" TextColor="Black"/>
+        <Button Text="Calculate" Clicked="Calculate" WidthRequest="370" x:Name="ProceedButton"/>
     </StackLayout>
 
 </ContentPage>

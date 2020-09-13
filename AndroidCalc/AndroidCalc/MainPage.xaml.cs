@@ -13,9 +13,10 @@ namespace AndroidCalc
         public MainPage()
         {
             InitializeComponent();
+            Input.WidthRequest = ProceedButton.Width - 30;
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private void Calculate(object sender, EventArgs e)
         {
             
         }
