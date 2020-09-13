@@ -4,17 +4,17 @@
              x:Class="AndroidCalc.MainPage">
 
     <StackLayout>
-        <Label Text="Калькулятор" Margin="30" FontSize="Large" FontAttributes="Bold" TextColor="Black"/>
-        <Entry x:Name="Input" HorizontalOptions="CenterAndExpand" Keyboard="Numeric"/>
-        <StackLayout Orientation="Horizontal" Spacing="50" HorizontalOptions="CenterAndExpand">
-            <Button Text="+"/>
-            <Button Text="-"/>
-            <Button Text="*"/>
+        <Label Text="Калькулятор" Margin="15" FontSize="Large" FontAttributes="Bold" TextColor="Black"/>
+        <Entry x:Name="Input" HorizontalOptions="CenterAndExpand" Keyboard="Numeric" WidthRequest="370"/>
+        <StackLayout Orientation="Horizontal" Spacing="50" HorizontalOptions="CenterAndExpand" Margin="10">
+            <Button Text="+" Clicked="_Add" FontSize="Large"/>
+            <Button Text="—" Clicked="_Sub" FontSize="Large"/>
+            <Button Text="*" Clicked="_Mul" FontSize="Large"/>
         </StackLayout>
-        <StackLayout Orientation="Horizontal" Spacing="50" HorizontalOptions="CenterAndExpand">
-            <Button Text="/"/>
-            <Button Text="^"/>
-            <Button Text="Sqrt"/>
+        <StackLayout Orientation="Horizontal" Spacing="50" HorizontalOptions="CenterAndExpand" Margin="10">
+            <Button Text="/" Clicked="_Div" FontSize="Large"/>
+            <Button Text="^" Clicked="_Pow" FontSize="Large"/>
+            <Button Text="-" Clicked="_uSub" FontSize="Large"/>
         </StackLayout>
         <Label x:Name="result" Margin="15" HorizontalTextAlignment="Center" Text="Результат: "
                FontSize="Large" FontAttributes="Bold" TextColor="Black"/>
