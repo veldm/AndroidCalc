@@ -31,19 +31,16 @@ namespace AndroidCalc
         private static string Input;
         #endregion
 
-        public static void Calculate()
-        {
-            //Console.WriteLine("Введите строку");
-            //Input = Console.ReadLine();
-            //try
-            //{
-            //    SplitCheck(Input);
-            //}
-            //catch (Exception E)
-            //{
-            //    Console.Write("ОШИБКА РАЗБИЕНИЯ: " + E.Message);
-            //    for (; ; );
-            //}
+        public static double Calculate(string Input)
+        { 
+            try
+            {
+                SplitCheck(Input);
+            }
+            catch (Exception E)
+            {
+                throw new Exception("Ошибка осмысления строки:\n" + E.Message);
+            }
             //int g = 1;
             //foreach (Part CurrentPart in Parts)
             //{
@@ -56,35 +53,28 @@ namespace AndroidCalc
             //        case PartType.Parenthesis:
             //            TypeString = "Скобка";
             //            break;
-            //        case PartType.Identifier:
-            //            TypeString = "Идентификатор";
-            //            break;
             //        case PartType.Number:
             //            TypeString = "Число";
             //            break;
             //    }
             //    g++;
             //}
-            //Console.WriteLine();
-            //double Result = 0.0;
-            //try
-            //{
-            //    Result = Evaluate();
-            //}
-            //catch (Exception E)
-            //{
-            //    Console.Write("ОШИБКА ВЫЧИСЛЕНИЯ: " + E.Message);
-            //    for (; ; );
-            //}
-            //Console.WriteLine();
-            //Console.WriteLine("Значение выражения: {0:f}", Result);
-            //for (; ; );
+            double Result = 0;
+            try
+            {
+                Result = Evaluate();
+            }
+            catch (Exception E)
+            {
+                throw new Exception("Ошибка вычисления:\n " + E.Message);
+            }
+            return Result;
         }
 
         public static void SplitCheck(string S)
         {
-            if (S.Length > 100) throw new Exception("Слишком длинная строка");
-            if (S.Length < 1) throw new Exception("Пустая строка");
+            if (S == null || S.Length < 1) throw new Exception("Пустая строка");
+            if (S.Length > 100) throw new Exception("Слишком длинная строка");            
             S = S + " ";
             int u = 0;
             for (int i = 0; i < S.Length; i++)
@@ -103,10 +93,11 @@ namespace AndroidCalc
                         Index++;
                         break;
                     case '+':
-                    case '-':
+                    case '—':
                     case '*':
                     case '/':
                     case '^':
+                    case '√':
                         NewPart.Value = S[Index].ToString();
                         NewPart.Type = PartType.Sign;
                         NewPart.Position = Index + 1;
@@ -134,7 +125,7 @@ namespace AndroidCalc
                                     if (Index == S.Length - 1) break;
                                 }
                             }
-                            if (S[Index + 1] == ',')
+                            if (S[Index + 1] == '.')
                             {
                                 Index++;
                                 C = C + S[Index];
@@ -156,8 +147,9 @@ namespace AndroidCalc
                         }
                         else
                         {
-                            throw new Exception("Недопустимый символ: позиция " +
-                                (Index + 1).ToString());
+                            throw new Exception("Недопустимый символ\"" + S[Index] +"\", позиция " + (Index + 1).ToString()
+                                + (S[Index] == '√' ? String.Format("\nПопробуйте заменить конструкцию вида\"√x{0}\" на \"(√x{0})\"", (char)862) : "")
+                                + (S[Index] == '—' ? "\nПопробуйте заменить конструкцию вида\"—x\" на \"—x)\"" : ""));
                         }
                 }
             }
@@ -195,10 +187,17 @@ namespace AndroidCalc
                     case PartType.Sign:
                         Operation CurrentOperation;
                         if (NeedValue)
-                            if (CurrentPart.Value[0] == '-')
+                            if (CurrentPart.Value[0] == '—')
                             {
                                 CurrentOperation.Sign = '~';
                                 CurrentOperation.Precedence = Depth * 10 + 1;
+                                if (OpStack.Count != 0) Reduce(CurrentOperation.Precedence);
+                                OpStack.Push(CurrentOperation);
+                            }
+                            else if (CurrentPart.Value[0] == '√')
+                            {
+                                CurrentOperation.Sign = '√';
+                                CurrentOperation.Precedence = Depth * 10 + 3;
                                 if (OpStack.Count != 0) Reduce(CurrentOperation.Precedence);
                                 OpStack.Push(CurrentOperation);
                             }
@@ -211,13 +210,14 @@ namespace AndroidCalc
                             switch (CurrentPart.Value[0])
                             {
                                 case '+':
-                                case '-':
+                                case '—':
                                     CurrentOperation.Precedence = Depth * 10 + 1;
                                     break;
                                 case '*':
                                 case '/':
                                     CurrentOperation.Precedence = Depth * 10 + 2;
                                     break;
+                                case '√':
                                 case '^':
                                     CurrentOperation.Precedence = Depth * 10 + 3;
                                     break;
@@ -261,7 +261,7 @@ namespace AndroidCalc
                         Res = Arg2 * Arg1;
                         ArgStack.Push(Res);
                         break;
-                    case '-':
+                    case '—':
                         Arg1 = ArgStack.Pop();
                         Arg2 = ArgStack.Pop();
                         Res = Arg2 - Arg1;
@@ -282,6 +282,11 @@ namespace AndroidCalc
                     case '~':
                         Arg1 = ArgStack.Pop();
                         Res = Arg1 * -1;
+                        ArgStack.Push(Res);
+                        break;
+                    case '√':
+                        Arg1 = ArgStack.Pop();
+                        Res = Math.Sqrt(Arg1);
                         ArgStack.Push(Res);
                         break;
                 }
